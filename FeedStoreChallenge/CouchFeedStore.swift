@@ -18,6 +18,7 @@ public class CouchFeedStore: FeedStore {
 	}
 	
 	public func retrieve(completion: @escaping RetrievalCompletion) {
+		completion(.empty)
 	}
 	
 	public func deleteCachedFeed(completion: @escaping DeletionCompletion) {
