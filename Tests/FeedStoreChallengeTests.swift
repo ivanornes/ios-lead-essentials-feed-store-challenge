@@ -30,11 +30,11 @@ class FeedStoreChallengeTests: XCTestCase, FeedStoreSpecs {
 
 		assertThatRetrieveHasNoSideEffectsOnEmptyCache(on: sut)
 	}
-	
+
 	func test_retrieve_deliversFoundValuesOnNonEmptyCache() {
-		//		let sut = makeSUT()
-		//
-		//		assertThatRetrieveDeliversFoundValuesOnNonEmptyCache(on: sut)
+		let sut = makeSUT()
+
+		assertThatRetrieveDeliversFoundValuesOnNonEmptyCache(on: sut)
 	}
 	
 	func test_retrieve_hasNoSideEffectsOnNonEmptyCache() {
@@ -94,9 +94,21 @@ class FeedStoreChallengeTests: XCTestCase, FeedStoreSpecs {
 	// - MARK: Helpers
 	
 	private func makeSUT() -> FeedStore {
-		CouchFeedStore()
+		try! CouchFeedStore(databaseName: "feed-database")
 	}
 	
+	override class func setUp() {
+		deleteDatabase()
+	}
+	
+	class func deleteDatabase() {
+		do {
+			let feedStore = try CouchFeedStore(databaseName: "feed-database")
+			feedStore.deleteCachedFeed { _ in }
+		} catch {
+			print(error)
+		}
+	}
 }
 
 //  ***********************
