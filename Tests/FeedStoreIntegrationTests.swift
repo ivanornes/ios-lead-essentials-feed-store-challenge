@@ -27,56 +27,56 @@ class FeedStoreIntegrationTests: XCTestCase {
 	}
 	
 	func test_retrieve_deliversEmptyOnEmptyCache() {
-		//        let sut = makeSUT()
-		//
-		//        expect(sut, toRetrieve: .empty)
+		let sut = makeSUT()
+
+		expect(sut, toRetrieve: .empty)
 	}
 	
 	func test_retrieve_deliversFeedInsertedOnAnotherInstance() {
-		//        let storeToInsert = makeSUT()
-		//        let storeToLoad = makeSUT()
-		//        let feed = uniqueImageFeed()
-		//        let timestamp = Date()
-		//
-		//        insert((feed, timestamp), to: storeToInsert)
-		//
-		//        expect(storeToLoad, toRetrieve: .found(feed: feed, timestamp: timestamp))
+		let storeToInsert = makeSUT()
+		let storeToLoad = makeSUT()
+		let feed = uniqueImageFeed()
+		let timestamp = Date()
+
+		insert((feed, timestamp), to: storeToInsert)
+
+		expect(storeToLoad, toRetrieve: .found(feed: feed, timestamp: timestamp))
 	}
 	
 	func test_insert_overridesFeedInsertedOnAnotherInstance() {
-		//        let storeToInsert = makeSUT()
-		//        let storeToOverride = makeSUT()
-		//        let storeToLoad = makeSUT()
-		//
-		//        insert((uniqueImageFeed(), Date()), to: storeToInsert)
-		//
-		//        let latestFeed = uniqueImageFeed()
-		//        let latestTimestamp = Date()
-		//        insert((latestFeed, latestTimestamp), to: storeToOverride)
-		//
-		//        expect(storeToLoad, toRetrieve: .found(feed: latestFeed, timestamp: latestTimestamp))
+		let storeToInsert = makeSUT()
+		let storeToOverride = makeSUT()
+		let storeToLoad = makeSUT()
+
+		insert((uniqueImageFeed(), Date()), to: storeToInsert)
+
+		let latestFeed = uniqueImageFeed()
+		let latestTimestamp = Date()
+		insert((latestFeed, latestTimestamp), to: storeToOverride)
+
+		expect(storeToLoad, toRetrieve: .found(feed: latestFeed, timestamp: latestTimestamp))
 	}
 	
 	func test_delete_deletesFeedInsertedOnAnotherInstance() {
-		//        let storeToInsert = makeSUT()
-		//        let storeToDelete = makeSUT()
-		//        let storeToLoad = makeSUT()
-		//
-		//        insert((uniqueImageFeed(), Date()), to: storeToInsert)
-		//
-		//        deleteCache(from: storeToDelete)
-		//
-		//        expect(storeToLoad, toRetrieve: .empty)
+		let storeToInsert = makeSUT()
+		let storeToDelete = makeSUT()
+		let storeToLoad = makeSUT()
+
+		insert((uniqueImageFeed(), Date()), to: storeToInsert)
+
+		deleteCache(from: storeToDelete)
+
+		expect(storeToLoad, toRetrieve: .empty)
 	}
 	
 	// - MARK: Helpers
 	
 	private func makeSUT() -> FeedStore {
-		fatalError("Must be implemented")
+		return try! CouchFeedStore(databaseName: "feed-database")
 	}
 	
 	private func setupEmptyStoreState() {
-		
+		makeSUT().deleteCachedFeed { _ in }
 	}
 	
 	private func undoStoreSideEffects() {
