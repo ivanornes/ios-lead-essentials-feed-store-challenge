@@ -98,29 +98,3 @@ public class CouchFeedStore: FeedStore {
 		}
 	}
 }
-
-extension ResultSet.Element {
-	var localFeedImage: LocalFeedImage? {
-		guard let id = string(forKey: "id"),
-			  let imageID = UUID(uuidString: id),
-			  let imageURL = string(forKey: "url"),
-			  let url = URL(string: imageURL) else { return nil }
-		return LocalFeedImage(id: imageID,
-					   description: string(forKey: "description"),
-					   location: string(forKey: "location"),
-					   url: url)
-	}
-}
-
-extension LocalFeedImage {
-	func toMutableDocument() -> MutableDocument {
-		let document = MutableDocument(id: id.uuidString, data: ["url": url.absoluteString])
-		if let location = location {
-			document.setString(location, forKey: "location")
-		}
-		if let description = description {
-			document.setString(description, forKey: "description")
-		}
-		return document
-	}
-}
