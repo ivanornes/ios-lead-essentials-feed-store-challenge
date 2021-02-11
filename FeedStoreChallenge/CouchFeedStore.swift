@@ -36,8 +36,7 @@ public class CouchFeedStore: FeedStore {
 	public func retrieve(completion: @escaping RetrievalCompletion) {
 		let imageFeedQuery = QueryBuilder.allFeedImagesQuery(from: database)
 		do {
-			let imageFeedResults = try imageFeedQuery.execute()
-			let mappedImages = imageFeedResults.compactMap { $0.localFeedImage }
+			let mappedImages = try imageFeedQuery.execute().compactMap { $0.localFeedImage }
 			if mappedImages.isEmpty {
 				completion(.empty)
 			} else {
@@ -60,15 +59,6 @@ public class CouchFeedStore: FeedStore {
 	}
 	
 	private func deleteAllDocuments() throws {
-		let results = try QueryBuilder
-			.allDocumentsQuery(from: database)
-			.execute()
-		
-		for result in results.allResults() {
-			if let id = result.string(forKey: "id"),
-			   let document = database.document(withID: id) {
-				try database.deleteDocument(document)
-			}
-		}
+		try QueryBuilder.allDocuments(from: database).forEach { try database.deleteDocument($0) }
 	}
 }

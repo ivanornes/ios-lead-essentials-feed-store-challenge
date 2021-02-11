@@ -24,5 +24,14 @@ extension QueryBuilder {
 			)
 		.from(DataSource.database(database))
 	}
+	
+	class func allDocuments(from database: Database) throws -> [Document] {
+		try allDocumentsQuery(from: database).execute().allResults().compactMap { result -> Document? in
+			if let id = result.string(forKey: "id") {
+				return database.document(withID: id)
+			}
+			return nil
+		}
+	}
 }
 
