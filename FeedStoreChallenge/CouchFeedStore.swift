@@ -19,14 +19,10 @@ public class CouchFeedStore: FeedStore {
 
 	public func insert(_ feed: [LocalFeedImage], timestamp: Date, completion: @escaping InsertionCompletion) {
 		let feedDocumets = feed.map { $0.toMutableDocument() }
-		let timestampDocument = MutableDocument(id: "timestamp")
-		/// Saving the timestamp as a timeIntervalSinceReferenceDate string avoids loosing precision
-		timestampDocument.setString("\(timestamp.timeIntervalSinceReferenceDate)", forKey: "timestamp")
-		timestampDocument.setString("timestamp", forKey: "type")
 		do {
 			try deleteAllDocuments()
 			try database.inBatch {
-				try database.saveDocument(timestampDocument)
+				try database.saveDocument(timestamp.document)
 				for document in feedDocumets {
 					try database.saveDocument(document)
 				}

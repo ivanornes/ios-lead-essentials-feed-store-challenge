@@ -22,6 +22,7 @@
 		9FBCC35E25D1D733007E3D33 /* CouchFeedStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FBCC35D25D1D733007E3D33 /* CouchFeedStore.swift */; };
 		9FBCC36425D5D773007E3D33 /* ResultSet.Element+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FBCC36325D5D773007E3D33 /* ResultSet.Element+Extension.swift */; };
 		9FBCC36825D5D79B007E3D33 /* LocalFeedImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FBCC36725D5D79B007E3D33 /* LocalFeedImage+Extension.swift */; };
+		9FBCC37625D5DA4E007E3D33 /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FBCC37525D5DA4E007E3D33 /* Date+Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +53,7 @@
 		9FBCC35D25D1D733007E3D33 /* CouchFeedStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CouchFeedStore.swift; sourceTree = "<group>"; };
 		9FBCC36325D5D773007E3D33 /* ResultSet.Element+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ResultSet.Element+Extension.swift"; sourceTree = "<group>"; };
 		9FBCC36725D5D79B007E3D33 /* LocalFeedImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LocalFeedImage+Extension.swift"; sourceTree = "<group>"; };
+		9FBCC37525D5DA4E007E3D33 /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,6 +103,7 @@
 				9FBCC35D25D1D733007E3D33 /* CouchFeedStore.swift */,
 				9FBCC36325D5D773007E3D33 /* ResultSet.Element+Extension.swift */,
 				9FBCC36725D5D79B007E3D33 /* LocalFeedImage+Extension.swift */,
+				9FBCC37525D5DA4E007E3D33 /* Date+Extension.swift */,
 				08CE2B8F2285BBD100183A1B /* Info.plist */,
 			);
 			path = FeedStoreChallenge;
@@ -251,6 +254,7 @@
 				9FBCC36425D5D773007E3D33 /* ResultSet.Element+Extension.swift in Sources */,
 				9FBCC35E25D1D733007E3D33 /* CouchFeedStore.swift in Sources */,
 				08CE2BA82285BCC600183A1B /* LocalFeedImage.swift in Sources */,
+				9FBCC37625D5DA4E007E3D33 /* Date+Extension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
