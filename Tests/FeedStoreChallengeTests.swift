@@ -94,20 +94,10 @@ class FeedStoreChallengeTests: XCTestCase, FeedStoreSpecs {
 	// - MARK: Helpers
 	
 	private func makeSUT() -> FeedStore {
-		try! CouchFeedStore(databaseName: "feed-database")
-	}
-	
-	override class func setUp() {
-		deleteDatabase()
-	}
-	
-	class func deleteDatabase() {
-		do {
-			let feedStore = try CouchFeedStore(databaseName: "feed-database")
-			feedStore.deleteCachedFeed { _ in }
-		} catch {
-			print(error)
-		}
+		let databaseName = "feed-database"
+		let feedStore = try! CouchFeedStore(databaseName: databaseName)
+		feedStore.deleteCachedFeed { _ in }
+		return try! CouchFeedStore(databaseName: databaseName)
 	}
 }
 
