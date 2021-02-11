@@ -72,20 +72,3 @@ public class CouchFeedStore: FeedStore {
 		}
 	}
 }
-
-extension QueryBuilder {
-	class func allDocumentsQuery(from database: Database) -> From {
-		select(SelectResult.expression(Meta.id))
-			.from(DataSource.database(database))
-	}
-	
-	class func allFeedImagesQuery(from database: Database) -> From {
-		select(
-				SelectResult.expression(Meta.id),
-				SelectResult.property("url"),
-				SelectResult.property("location"),
-				SelectResult.property("description")
-			)
-		.from(DataSource.database(database))
-	}
-}
