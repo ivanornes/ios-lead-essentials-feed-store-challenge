@@ -18,16 +18,7 @@ public class CouchFeedStore: FeedStore {
 	}
 
 	public func insert(_ feed: [LocalFeedImage], timestamp: Date, completion: @escaping InsertionCompletion) {
-		let feedDocumets = feed.map { feedImage -> MutableDocument in
-			let document = MutableDocument(id: feedImage.id.uuidString, data: ["url": feedImage.url.absoluteString])
-			if let location = feedImage.location {
-				document.setString(location, forKey: "location")
-			}
-			if let description = feedImage.description {
-				document.setString(description, forKey: "description")
-			}
-			return document
-		}
+		let feedDocumets = feed.map { $0.toMutableDocument() }
 		let timestampDocument = MutableDocument(id: "timestamp")
 		/// Saving the timestamp as a timeIntervalSinceReferenceDate string avoids loosing precision
 		timestampDocument.setString("\(timestamp.timeIntervalSinceReferenceDate)", forKey: "timestamp")
@@ -73,16 +64,7 @@ public class CouchFeedStore: FeedStore {
 				timestamp = Date(timeIntervalSinceReferenceDate: TimeInterval(result.string(forKey: "timestamp")!)!)
 			}
 			
-			let mappedImages = imageFeedResults.compactMap { result -> LocalFeedImage? in
-				guard let id = result.string(forKey: "id"),
-					  let imageID = UUID(uuidString: id),
-					  let imageURL = result.string(forKey: "url"),
-					  let url = URL(string: imageURL) else { return nil }
-				return LocalFeedImage(id: imageID,
-							   description: result.string(forKey: "description"),
-							   location: result.string(forKey: "location"),
-							   url: url)
-			}
+			let mappedImages = imageFeedResults.compactMap { $0.localFeedImage }
 			if mappedImages.isEmpty {
 				completion(.empty)
 			} else {
@@ -114,5 +96,31 @@ public class CouchFeedStore: FeedStore {
 				try database.deleteDocument(document)
 			}
 		}
+	}
+}
+
+extension ResultSet.Element {
+	var localFeedImage: LocalFeedImage? {
+		guard let id = string(forKey: "id"),
+			  let imageID = UUID(uuidString: id),
+			  let imageURL = string(forKey: "url"),
+			  let url = URL(string: imageURL) else { return nil }
+		return LocalFeedImage(id: imageID,
+					   description: string(forKey: "description"),
+					   location: string(forKey: "location"),
+					   url: url)
+	}
+}
+
+extension LocalFeedImage {
+	func toMutableDocument() -> MutableDocument {
+		let document = MutableDocument(id: id.uuidString, data: ["url": url.absoluteString])
+		if let location = location {
+			document.setString(location, forKey: "location")
+		}
+		if let description = description {
+			document.setString(description, forKey: "description")
+		}
+		return document
 	}
 }
