@@ -18,12 +18,11 @@ public class CouchFeedStore: FeedStore {
 	}
 
 	public func insert(_ feed: [LocalFeedImage], timestamp: Date, completion: @escaping InsertionCompletion) {
-		let feedDocumets = feed.map { $0.toMutableDocument() }
 		do {
 			try deleteAllDocuments()
 			try database.inBatch {
 				try database.saveDocument(timestamp.document)
-				for document in feedDocumets {
+				for document in feed.map({ $0.toMutableDocument() }) {
 					try database.saveDocument(document)
 				}
 			}
