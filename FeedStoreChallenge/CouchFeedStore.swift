@@ -28,11 +28,12 @@ public class CouchFeedStore: FeedStore {
 			}
 			return document
 		}
-		let timestampDocument = MutableDocument()
+		let timestampDocument = MutableDocument(id: "timestamp")
 		/// Saving the timestamp as a timeIntervalSinceReferenceDate string avoids loosing precision
 		timestampDocument.setString("\(timestamp.timeIntervalSinceReferenceDate)", forKey: "timestamp")
 		timestampDocument.setString("timestamp", forKey: "type")
 		do {
+			try deleteAllDocuments()
 			try database.inBatch {
 				try database.saveDocument(timestampDocument)
 				for document in feedDocumets {
@@ -94,10 +95,24 @@ public class CouchFeedStore: FeedStore {
 	
 	public func deleteCachedFeed(completion: @escaping DeletionCompletion) {
 		do {
-			try database.delete()
+			try deleteAllDocuments()
 			completion(nil)
 		} catch {
 			completion(error)
+		}
+	}
+	
+	private func deleteAllDocuments() throws {
+		let results = try QueryBuilder
+			.select(SelectResult.expression(Meta.id))
+			.from(DataSource.database(database))
+			.execute()
+		
+		for result in results.allResults() {
+			if let id = result.string(forKey: "id"),
+			   let document = database.document(withID: id) {
+				try database.deleteDocument(document)
+			}
 		}
 	}
 }
