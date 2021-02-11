@@ -69,8 +69,7 @@ public class CouchFeedStore: FeedStore {
 	
 	private func deleteAllDocuments() throws {
 		let results = try QueryBuilder
-			.select(SelectResult.expression(Meta.id))
-			.from(DataSource.database(database))
+			.allDocumentsQuery(database)
 			.execute()
 		
 		for result in results.allResults() {
@@ -79,5 +78,12 @@ public class CouchFeedStore: FeedStore {
 				try database.deleteDocument(document)
 			}
 		}
+	}
+}
+
+extension QueryBuilder {
+	class func allDocumentsQuery(_ database: Database) -> From {
+		return select(SelectResult.expression(Meta.id))
+			.from(DataSource.database(database))
 	}
 }
