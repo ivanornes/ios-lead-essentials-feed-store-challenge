@@ -47,27 +47,14 @@ public class CouchFeedStore: FeedStore {
 				)
 			.from(DataSource.database(database))
 		
-		let timestampQuery = QueryBuilder
-			.select(
-				SelectResult.expression(Meta.id),
-				SelectResult.property("timestamp")
-			)
-			.from(DataSource.database(database))
-			.where(Expression.property("type").equalTo(Expression.string("timestamp")))
-			.limit(Expression.int(1))
-		
 		do {
-			let timestampResults = try timestampQuery.execute()
 			let imageFeedResults = try imageFeedQuery.execute()
-			var timestamp: Date = .init()
-			for result in timestampResults {
-				timestamp = Date(timeIntervalSinceReferenceDate: TimeInterval(result.string(forKey: "timestamp")!)!)
-			}
-			
 			let mappedImages = imageFeedResults.compactMap { $0.localFeedImage }
 			if mappedImages.isEmpty {
 				completion(.empty)
 			} else {
+				let value = database.document(withID: "timestamp")!.string(forKey: "timestamp")!
+				let timestamp = Date(timeIntervalSinceReferenceDate: TimeInterval(value)!)
 				completion(.found(feed: mappedImages, timestamp: timestamp))
 			}
 		} catch {
