@@ -34,15 +34,7 @@ public class CouchFeedStore: FeedStore {
 	}
 	
 	public func retrieve(completion: @escaping RetrievalCompletion) {
-		let imageFeedQuery = QueryBuilder
-			.select(
-					SelectResult.expression(Meta.id),
-					SelectResult.property("url"),
-					SelectResult.property("location"),
-					SelectResult.property("description")
-				)
-			.from(DataSource.database(database))
-		
+		let imageFeedQuery = QueryBuilder.allFeedImagesQuery(from: database)
 		do {
 			let imageFeedResults = try imageFeedQuery.execute()
 			let mappedImages = imageFeedResults.compactMap { $0.localFeedImage }
@@ -69,7 +61,7 @@ public class CouchFeedStore: FeedStore {
 	
 	private func deleteAllDocuments() throws {
 		let results = try QueryBuilder
-			.allDocumentsQuery(database)
+			.allDocumentsQuery(from: database)
 			.execute()
 		
 		for result in results.allResults() {
@@ -82,8 +74,18 @@ public class CouchFeedStore: FeedStore {
 }
 
 extension QueryBuilder {
-	class func allDocumentsQuery(_ database: Database) -> From {
-		return select(SelectResult.expression(Meta.id))
+	class func allDocumentsQuery(from database: Database) -> From {
+		select(SelectResult.expression(Meta.id))
 			.from(DataSource.database(database))
+	}
+	
+	class func allFeedImagesQuery(from database: Database) -> From {
+		select(
+				SelectResult.expression(Meta.id),
+				SelectResult.property("url"),
+				SelectResult.property("location"),
+				SelectResult.property("description")
+			)
+		.from(DataSource.database(database))
 	}
 }
