@@ -33,5 +33,14 @@ extension QueryBuilder {
 			return nil
 		}
 	}
+	
+	class func timestamp(from database: Database) -> Date? {
+		if let document = database.document(withID: "timestamp"),
+		   let storedValue = document.string(forKey: "timestamp"),
+		   let timestamp = TimeInterval(storedValue) {
+			return Date(timeIntervalSinceReferenceDate: timestamp)
+		}
+		return nil
+	}
 }
 

@@ -36,12 +36,10 @@ public class CouchFeedStore: FeedStore {
 		let imageFeedQuery = QueryBuilder.allFeedImagesQuery(from: database)
 		do {
 			let mappedImages = try imageFeedQuery.execute().compactMap { $0.localFeedImage }
-			if mappedImages.isEmpty {
-				completion(.empty)
-			} else {
-				let value = database.document(withID: "timestamp")!.string(forKey: "timestamp")!
-				let timestamp = Date(timeIntervalSinceReferenceDate: TimeInterval(value)!)
+			if let timestamp = QueryBuilder.timestamp(from: database) {
 				completion(.found(feed: mappedImages, timestamp: timestamp))
+			} else {
+				completion(.empty)
 			}
 		} catch {
 			completion(.failure(error))
