@@ -72,15 +72,14 @@ class FeedStoreIntegrationTests: XCTestCase {
 	// - MARK: Helpers
 	
 	private func makeSUT() -> FeedStore {
-		return try! CouchFeedStore(databaseName: "feed-database")
+		try! CouchFeedStore(databaseName: "feed-database")
 	}
 	
 	private func setupEmptyStoreState() {
-		makeSUT().deleteCachedFeed { _ in }
+		deleteCache(from: makeSUT())
 	}
 	
 	private func undoStoreSideEffects() {
-		
+		deleteCache(from: makeSUT())
 	}
-	
 }

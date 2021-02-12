@@ -94,9 +94,14 @@ class FeedStoreChallengeTests: XCTestCase, FeedStoreSpecs {
 	// - MARK: Helpers
 	
 	private func makeSUT() -> FeedStore {
-		let databaseName = "feed-database"
-		let feedStore = try! CouchFeedStore(databaseName: databaseName)
-		feedStore.deleteCachedFeed { _ in }
-		return try! CouchFeedStore(databaseName: databaseName)
+		try! CouchFeedStore(databaseName: "feed-database")
+	}
+
+	override func setUp() {
+		deleteCache(from: makeSUT())
+	}
+	
+	override func tearDown() {
+		deleteCache(from: makeSUT())
 	}
 }
