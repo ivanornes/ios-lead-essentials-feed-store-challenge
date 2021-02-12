@@ -14,7 +14,7 @@ public class CouchFeedStore: FeedStore {
 	private let database: Database
 	
 	public init(databaseName: String) throws {
-		self.database = try Database(name: databaseName)
+		database = try Database(name: databaseName)
 	}
 
 	public func insert(_ feed: [LocalFeedImage], timestamp: Date, completion: @escaping InsertionCompletion) {
