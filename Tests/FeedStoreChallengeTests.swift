@@ -98,10 +98,12 @@ class FeedStoreChallengeTests: XCTestCase, FeedStoreSpecs {
 	}
 
 	override func setUp() {
+		super.setUp()
 		deleteCache(from: makeSUT())
 	}
 	
 	override func tearDown() {
+		super.tearDown()
 		deleteCache(from: makeSUT())
 	}
 }
